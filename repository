@@ -1,0 +1,8 @@
+upd_3="SELECT now()"
+upd_2="This is 2"
+
+upd_1="SELECT now()"
+upd_2="this is another 2"
+upd_4="Here is multiline string
+which goes to several lines
+    and also has tabs in it"

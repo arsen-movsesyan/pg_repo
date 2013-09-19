@@ -1,0 +1,54 @@
+pg_repo
+=======
+
+Simple database changes and upgrades tracking system
+
+Installation:
+
+First edit "settings.py" file modify DATABASE['db_handler_1'] parameters to connect to your database
+
+Run "python db_update.py -h" for help
+Run "python db_update.py -i" for installation
+
+
+Usage:
+for basic usage run "python db_update.py --help"
+
+
+Incremental update format:
+
+
+Empty lines are ignored.
+File "updates must contain all incremental updates in following format:
+
+    upd_<update_number>="<DDL statement in quotes here>"
+
+Example:
+
+    upd_1="CREATE TABLE foo (id INTEGER PRIMARY KEY, field text)"
+    upd_2="ALTER TABLE foo ADD COLUMN when TIMESTAMPTZ DEFAULT now()"
+
+Numbers must be sequentially incremented.
+Order of update nubers is not important. Minor update may come later then major:
+
+    ...
+    upd_18="ALTER TABLE..."
+    upd_17="CREATE TABLE..."
+
+!!! Attention !!!
+
+It is developer's responsibiity to not duplicate numbers.
+Later duplicate will override previous one!
+
+    ...
+    upd_23="CREATE INDEX..."
+    upd_24="ALTER TABLE ADD COLUMN..."
+    ...
+    upd_23="DROP TABLE IF EXISTS..."
+
+Here "CREATE INDEX..." will be ignored
+
+It is good practice to place updates in correct order.
+
+Once updates are get applied, it is safe to run multiple times.
+Applied updates may be archived safely.

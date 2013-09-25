@@ -1,4 +1,4 @@
-#!/usr/local/bin/python -B
+#!/usr/bin/env python
 
 import argparse
 import sys
@@ -33,8 +33,9 @@ class UpdSource():
 		continue
 	    else:
 		lines[-1] += ' '+line.strip()
+
 	for upd in lines:
-	    a=upd.split('=')
+	    a=upd.split('=',1)
 	    if re.match('^upd_\d$',a[0]) and int(a[0][4:]) > self.last_update:
 		self.upd_dict[int(a[0][4:])]=a[1][1:-1]
 
@@ -124,7 +125,8 @@ class Apply():
 		cur.execute(stmt)
 		cur.execute(settings.confirm_stmt,(number,stmt))
 	    except Exception as e:
-		print "ERROR! Cannot run update {0}{1}".format(number,e.pgerror)
+		print "ERROR! Cannot run update {0}\n{1}".format(number,e.pgerror)
+#		print "\n"+stmt+"\n"
 		return False
 
 	return True
@@ -176,11 +178,11 @@ except Exception as e:
 db_st=DbState(conn)
 
 installed=db_st.get_installed()
-last_applied=db_st.get_last_applied()
+#last_applied=db_st.get_last_applied()
 
-if last_applied == -1:
-    conn.close()
-    sys.exit()
+#if last_applied == -1:
+#    conn.close()
+#    sys.exit()
 
 
 if installed == 0:

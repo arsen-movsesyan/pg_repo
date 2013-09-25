@@ -22,7 +22,7 @@ repo_file_name='repository'
 
 get_last_applied_stmt="SELECT COALESCE(MAX(update_number),0) FROM db_update"
 get_install_check_stmt="SELECT COUNT(1) FROM pg_class WHERE relname='db_update' AND relkind='r'"
-instal_stmt="""CREATE table db_update(
+install_stmt="""CREATE table db_update(
 update_number integer NOT NULL PRIMARY KEY,
 update_content text NOT NULL,
 update_time timestamp with time zone NOT NULL DEFAULT now())"""

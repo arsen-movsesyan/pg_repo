@@ -5,6 +5,7 @@ import sys
 import re
 import settings
 import psycopg2
+import imp
 
 ########################################################################################
 
@@ -25,19 +26,28 @@ class UpdSource():
 	except IOError as e:
 	    print "ERROR! Cannot open file"
 	    sys.exit(1)
-	lines=[]
-	for line in src:
-	    if re.match('^upd_\d',line):
-		lines.append(line.strip())
-	    elif len(line.strip()) == 0:
-		continue
-	    else:
-		lines[-1] += ' '+line.strip()
+	try:
+	    repo=imp.load_source('repo','.',src)
+	except Exception as e:
+	    print "Error happened: {0}".format(e)
+	    sys.exit(1)
+	for var in dir(repo):
+	    if re.match('^upd_\d',var):
+		self.upd_dict[int(var[4:])]=eval('repo.'+str(var))
 
-	for upd in lines:
-	    a=upd.split('=',1)
-	    if re.match('^upd_\d$',a[0]) and int(a[0][4:]) > self.last_update:
-		self.upd_dict[int(a[0][4:])]=a[1][1:-1]
+#	lines=[]
+#	for line in src:
+#	    if re.match('^upd_\d',line):
+#		lines.append(line.strip())
+#	    elif len(line.strip()) == 0:
+#		continue
+#	    else:
+#		lines[-1] += ' '+line.strip()
+#
+#	for upd in lines:
+#	    a=upd.split('=',1)
+#	    if re.match('^upd_\d$',a[0]) and int(a[0][4:]) > self.last_update:
+#		self.upd_dict[int(a[0][4:])]=a[1][1:-1]
 
 
     def get_upd_dict(self):

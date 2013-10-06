@@ -1,8 +1,8 @@
-upd_3="SELECT now()"
+upd_3="SELECT now() as 3"
 upd_2="This is 2"
 
-upd_1="SELECT now()"
+upd_1="SELECT now() as 1"
 upd_2="this is another 2"
-upd_4="Here is multiline string
+upd_4="""Here is multiline string
 which goes to several lines
-    and also has tabs in it"
+    and also has tabs in it"""
